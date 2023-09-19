@@ -3,8 +3,26 @@
     <router-link class="menu" to="/">Main</router-link> |
     <router-link class="menu" to="/barchartEX">BarChart</router-link> |
     <router-link class="menu" to="/piechartEX">PieChart</router-link> |
-    <router-link class="menu" to="/guageChart">GaugeChart</router-link>|
-    <router-link class="menu" to="/staticChart">StaticChart</router-link>
+    <router-link class="menu" to="/guageChart">GaugeChart</router-link> |
+    <router-link class="menu" to="/staticChart">StaticChart</router-link> |
+    <!-- <router-link class="menu" to="/dynamicDataChart"
+      >DynamicDataChart</router-link
+    >| -->
+    <!-- <router-link class="menu" to="/dynamicDataMultipleChart"
+      >DynamicDataMulti</router-link
+    >|
+    <router-link class="menu" to="/dynamicDataAsyncMultipleChart"
+      >DynamicDataMulti.v1</router-link
+    >|
+    <router-link class="menu" to="/dynamicDataAsyncMultipleChartv2"
+      >DynamicDataMulti.v2</router-link
+    >| -->
+    <router-link class="menu" to="/dynamicDataAsyncMultipleChartv3"
+      >DynamicDataMultipleChart</router-link
+    >
+    |
+    <router-link class="menu" to="/heatMap">HeatMap</router-link> |
+    <router-link class="menu" to="/windy">Windy</router-link>
   </div>
 </template>
 

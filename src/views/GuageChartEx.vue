@@ -153,7 +153,7 @@ onMounted(() => {
     const random = +(Math.random() * 60).toFixed(2);
     option.value.series[0].data[0].value = random;
     option.value.series[1].data[0].value = random;
-    console.log("TEST");
+    // console.log("TEST");
   }, 2000);
 });
 

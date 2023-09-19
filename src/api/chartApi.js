@@ -1,16 +1,19 @@
 import axios from "axios";
 
-export const chartApi = () => {
+export const chartApi = (range, location) => {
   const params = {
-    bucket: "gns",
-    range: "-30s",
+    bucket: "echart",
+    range: range,
     measurement: "temperature",
-    sort: "desc",
+    sort: "asc",
+    filterMap: {
+      location: location,
+    },
   };
   return axios
-    .post("http://192.168.0.172:9090/Influx/Read", params)
+    .post("http://localhost:9090/Influx/Read", params)
     .then((res) => {
-      console.log(res.data);
+      // console.log(res.data);
       return res.data;
     })
     .catch((error) => {
