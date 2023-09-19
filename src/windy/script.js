@@ -1,3 +1,5 @@
+// import { defineProps } from "vue";
+
 const options = {
   // Required: API key
   key: "ZztPKlZI6FZ5hdGiBprGbfQYcBquygBQ", // REPLACE WITH YOUR KEY !!!
@@ -7,6 +9,13 @@ const options = {
 
   //43.559096, 138.865190
 };
+
+export const myfn = () => {
+  console.log("123");
+};
+
+// const props = defineProps(["selectedBoats"]);
+// console.log(props.selectedBoats.rank);
 
 windyInit(options, (windyAPI) => {
   const { map } = windyAPI;
@@ -43,6 +52,11 @@ windyInit(options, (windyAPI) => {
       }
     }
   };
+  window.addEventListener("message", receive);
+  function receive(e) {
+    console.log(e.data);
+  }
+  // fetch("http://localhost:8080/windy").then((respose) => console.log(respose));
 
   fetch("boats.json")
     .then((response) => response.json())

@@ -11,12 +11,18 @@ import dynamicDataAsyncMultipleChartv2 from "@/views/DynamicDataAsyncMultipleCha
 import dynamicDataAsyncMultipleChartv3 from "@/views/DynamicDataAsyncMultipleChartv3";
 import heatMap from "@/views/HeatMap";
 import windy from "@/views/windyExercise";
+import seperateChart from "@/views/SeperateChart";
 
 const routes = [
   {
     path: "/",
     name: "MainView",
     component: MainView,
+  },
+  {
+    path: "/",
+    name: "seperateChart",
+    component: seperateChart,
   },
   {
     path: "/barchartEX",
