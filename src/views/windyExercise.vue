@@ -4,43 +4,58 @@
       type="text/html"
       ref="ifrmWindy"
       id="ifrmWindy"
-      src="http://127.0.0.1:5501/src/windy/index.html"
+      src="http://127.0.0.1:5501/src/windy/windy.html"
+      @load="windyLoad"
+      :selected="selected"
       class="is-fullscreen"
     />
     <div class="checkboxes">
       <p>{{ selected }}</p>
       <v-checkbox
         v-for="item in boats.result"
-        :key="item.rank"
+        :key="item.sail"
         v-model="selected"
         :label="item.sail"
-        :value="item.rank"
-        @click="onClick"
+        :value="item.sail"
+        @click="sendMessage"
       ></v-checkbox>
     </div>
   </div>
 </template>
 
 <script setup>
+// import RenderToIFrame from "@/components/RenderToIFrame";
 import { onMounted, ref } from "vue";
 import boats from "@/windy/boats.json";
-import { myfn } from "@/windy/script.js";
-// import { windyinit } from "https://api.windy.com/assets/map-forecast/libBoot.js";
-// import axios from "axios";
 
-myfn();
-const selected = ref([]);
+const selected = ref(["FRA18"]);
+const ifrmWindy = ref(null);
 
 onMounted(() => {});
-
-const onClick = () => {
-  console.log("click");
+//
+const sendMessage = () => {
+  console.log(selected);
+  ifrmWindy.value.contentWindow.postMessage(
+    JSON.parse(JSON.stringify(selected)),
+    "http://127.0.0.1:5501/src/windy/windy.html"
+  );
 };
+// const getChild = () => {
+//   let frame = ifrmWindy.value;
+//   console.log(frame.contentWindow);
+//   // return frame.contentWindow || frame.contentDocument;
+// };
+// watch(() => {
+//   getChild();
+//   // if (getChild()) {
+//   //   getChild().changeMap();
+//   // }
+// });
 
-// const rank = ref([]);
-// boats.result.then((boat) => console.log(boat));
-console.log(boats.result);
-// boats.forea;
+// const onClick = () => {
+//   console.log(`selected.value : ${selected.value}`);
+//   sendMessage();
+// };
 </script>
 
 <style>
