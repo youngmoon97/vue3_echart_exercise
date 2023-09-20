@@ -19,7 +19,9 @@
         };
         let mapData = null;
         let selectedMarkers = []
-        const markers = [];
+        let markers = [];
+        let layer = null;
+        let marker = null;
 
         const MARKER =
             encodeURIComponent(`
@@ -29,106 +31,64 @@
     <path fill="#41B883" d="m0 0l128 220.8L256 0h-51.2L128 132.48L50.56 0H0Z"></path>
     <path fill="#35495E" d="M50.56 0L128 133.12L204.8 0h-47.36L128 51.2L97.92 0H50.56Z"></path>
 </svg>`);
-        const MARKER_ICON_URL = `data:image/svg+xml;utf8,${MARKER}`;
 
-        const BoatIcon = L.icon({
-            iconUrl: MARKER_ICON_URL,
-            iconSize: [24, 24],
-            iconAnchor: [12, 12],
-            popupAnchor: [0, 0],
-        });
+        function init() {
+            windyInit(options, (windyAPI) => {
+                const {
+                    map
+                } = windyAPI;
+                mapData = map;
+                changeMap()
+            });
+        }
 
-
-        const updateIconStyle = () => {
-            for (const marker of markers) {
-                const icon = marker._icon;
-                if (!icon) {
-                    continue;
-                }
-                const heading = icon.getAttribute("data-heading");
-                if (icon.style.transform.indexOf("rotateZ") === -1) {
-                    icon.style.transform = `${
-icon.style.transform
-} rotateZ(${heading || 0}deg)`;
-                    icon.style.transformOrigin = 'center';
-                }
-            }
-        };
-        windyInit(options, (windyAPI) => {
-            const {
-                map
-            } = windyAPI;
-            mapData = map;
-
-
-            fetch("boats.json")
-                .then((response) => response.json())
-                .then((result) => result.result)
-                .then((result) => {
-                    try {
-                        let hue = 0;
-
-                        hue = (hue + 60) % 360;
-
-                        const boat = result.FRA18;
-
-                        const layer = L.polyline(boat.track, {
-                            color: `hsl(${hue}, 100%, 45%)`,
-                            weight: 2,
-                        }).addTo(mapData);
-
-                        layer.on("mouseover", function () {
-                            layer.setStyle({
-                                weight: 4,
-                            });
-                        });
-
-                        layer.on("mouseout", function () {
-                            layer.setStyle({
-                                weight: 2,
-                            });
-                        });
-
-                        const marker = L.marker(boat.track[boat.track.length - 1], {
-                            icon: BoatIcon,
-                        }).addTo(mapData);
-
-                        markers.push(marker);
-                        marker._icon.setAttribute("data-heading", boat.heading);
-                        marker.bindPopup(result.FRA18.sail);
-
-                        updateIconStyle();
-
-                    } catch (error) {
-                        console.error(`Error querying boats: ${error.message}`);
-                    }
-                })
-                .catch((error) => {
-                    console.error(`Error querying boats: ${error.message}`);
-                });
-        });
 
         const changeMap = () => {
+            const MARKER_ICON_URL = `data:image/svg+xml;utf8,${MARKER}`;
+
+
+            const BoatIcon = L.icon({
+                iconUrl: MARKER_ICON_URL,
+                iconSize: [24, 24],
+                iconAnchor: [12, 12],
+                popupAnchor: [0, 0],
+            });
+
+
+            const updateIconStyle = () => {
+                for (const marker of markers) {
+                    const icon = marker._icon;
+                    if (!icon) {
+                        continue;
+                    }
+                    const heading = icon.getAttribute("data-heading");
+                    if (icon.style.transform.indexOf("rotateZ") === -1) {
+                        icon.style.transform = `${
+icon.style.transform
+} rotateZ(${heading || 0}deg)`;
+                        icon.style.transformOrigin = 'center';
+                    }
+                }
+            };
             fetch("boats.json")
                 .then((response) => response.json())
                 .then((result) => result.result)
                 .then((result) => {
                     try {
                         let hue = 0;
-                        markers = []
-                        layer.remove()
-                        for (const boatName of Object.keys(result)) {
-                            hue = (hue + 60) % 360;
 
+                        for (const boatName of Object.keys(result)) {
+
+                            hue = (hue + 60) % 360;
                             const boat = result[boatName];
-                            // console.log(selectedMarkers)
-                            // if (selectedMarkers.includes(boat.rank)) {
+
                             selectedMarkers.forEach((res) => {
                                 if (boatName == res) {
-                                    const layer = L.polyline(boat.track, {
+                                    layer = L.polyline(boat.track, {
                                         color: `hsl(${hue}, 100%, 45%)`,
                                         weight: 2,
                                     }).addTo(mapData);
+
                                     layer.on("mouseover", function () {
                                         layer.setStyle({
                                             weight: 4,
@@ -141,7 +101,7 @@ icon.style.transform
                                         });
                                     });
 
-                                    const marker = L.marker(boat.track[boat.track.length - 1], {
+                                    marker = L.marker(boat.track[boat.track.length - 1], {
                                         icon: BoatIcon,
                                     }).addTo(mapData);
 
@@ -162,13 +122,22 @@ icon.style.transform
                 });
         }
 
-
+        init()
         window.addEventListener('message', function (e) {
+
+            if (e.origin !== "http://localhost:8080") return;
             // console.log('child message');
-            console.log(e); // { parentData : 'test parent data' }
+            // console.log(e); // { parentData : 'test parent data' }
             // console.log("e.origin : " + e.origin); //http://abc.com(부모창 도메인)
+            // if (marker != null && layer != null) {
+            //     console.log(markers)
+            //     markers.splice(0)
+            //     marker.remove()
+            //     layer.remove()
+            //     console.log(markers)
+            // }
             selectedMarkers = e.data._value
-            changeMap()
+            init()
         });
     </script>
 </head>

@@ -6,35 +6,37 @@
       id="ifrmWindy"
       src="http://127.0.0.1:5501/src/windy/windy.html"
       @load="windyLoad"
-      :selected="selected"
       class="is-fullscreen"
     />
     <div class="checkboxes">
       <p>{{ selected }}</p>
+      <v-btn @click="sendMessage"> Button </v-btn>
       <v-checkbox
         v-for="item in boats.result"
         :key="item.sail"
         v-model="selected"
         :label="item.sail"
         :value="item.sail"
-        @click="sendMessage"
       ></v-checkbox>
     </div>
   </div>
 </template>
 
 <script setup>
-// import RenderToIFrame from "@/components/RenderToIFrame";
 import { onMounted, ref } from "vue";
 import boats from "@/windy/boats.json";
 
-const selected = ref(["FRA18"]);
+const selected = ref([]);
 const ifrmWindy = ref(null);
-
-onMounted(() => {});
+onMounted(() => {
+  // console.log(ifrmWindy);
+  // console.log(selected);
+});
 //
 const sendMessage = () => {
-  console.log(selected);
+  // console.log(selected);
+  // console.log(JSON.stringify(selected));
+  // console.log(JSON.parse(JSON.stringify(selected)));
   ifrmWindy.value.contentWindow.postMessage(
     JSON.parse(JSON.stringify(selected)),
     "http://127.0.0.1:5501/src/windy/windy.html"
@@ -51,11 +53,6 @@ const sendMessage = () => {
 //   //   getChild().changeMap();
 //   // }
 // });
-
-// const onClick = () => {
-//   console.log(`selected.value : ${selected.value}`);
-//   sendMessage();
-// };
 </script>
 
 <style>
