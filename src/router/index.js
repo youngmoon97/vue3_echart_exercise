@@ -20,7 +20,7 @@ const routes = [
     component: MainView,
   },
   {
-    path: "/",
+    path: "/seperateChart",
     name: "seperateChart",
     component: seperateChart,
   },

@@ -26,8 +26,6 @@
         </v-sheet>
       </v-col>
     </v-row>
-
-    <v-chart class="chart" :option="option5" autoresize />
   </v-container>
 </template>
 
@@ -284,80 +282,6 @@ const option4 = ref({
     },
   ],
 });
-const option5 = ref({
-  title: {
-    text: "Option1-EAST",
-    left: "left",
-  },
-  grid: [
-    { left: "7%", top: "7%", width: "38%", height: "38%" },
-    { right: "7%", top: "7%", width: "38%", height: "38%" },
-    { left: "7%", bottom: "7%", width: "38%", height: "38%" },
-    { right: "7%", bottom: "7%", width: "38%", height: "38%" },
-  ],
-  tooltip: {
-    trigger: "axis",
-    axisPointer: {
-      animation: false,
-    },
-  },
-  toolbox: {
-    show: true,
-    feature: {
-      magicType: {
-        show: true,
-        type: ["stack", "tiled"],
-      },
-      saveAsImage: { show: true },
-    },
-  },
-  // legend: {
-  //   data: [""],
-  // },
-  xAxis: [
-    { gridIndex: 0, min: 0 },
-    { gridIndex: 1, min: 0 },
-    { gridIndex: 2, min: 0 },
-    { gridIndex: 3, min: 0 },
-  ],
-  yAxis: [
-    { gridIndex: 0, min: 0 },
-    { gridIndex: 1, min: 0 },
-    { gridIndex: 2, min: 0 },
-    { gridIndex: 3, min: 0 },
-  ],
-  series: [
-    {
-      name: "east",
-      type: "line",
-      xAxisIndex: 0,
-      yAxisIndex: 0,
-      data: eastData.value.time,
-    },
-    {
-      name: "west",
-      type: "line",
-      xAxisIndex: 1,
-      yAxisIndex: 1,
-      data: westData.value.time,
-    },
-    {
-      name: "south",
-      type: "line",
-      xAxisIndex: 2,
-      yAxisIndex: 2,
-      data: southData.value.time,
-    },
-    {
-      name: "north",
-      type: "line",
-      xAxisIndex: 3,
-      yAxisIndex: 3,
-      data: northData.value.time,
-    },
-  ],
-});
-
 // 데이터 하나씩 넘겨받아서 뿌려주기 생각
 
 // 초기 데이터 for로 전부 다 받아서 뿌리고

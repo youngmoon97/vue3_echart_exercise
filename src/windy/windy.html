@@ -19,10 +19,12 @@
         };
         let mapData = null;
         let selectedMarkers = []
+
         let markers = [];
         let layer = null;
+        let layers = []
         let marker = null;
-
+        // let pastMarker = [];
         let MARKER =
             encodeURIComponent(`
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img"
@@ -38,7 +40,6 @@
                     map
                 } = windyAPI;
                 mapData = map;
-                changeMap()
             });
         }
 
@@ -54,7 +55,6 @@
                 popupAnchor: [0, 0],
             });
 
-
             const updateIconStyle = () => {
                 for (const marker of markers) {
                     const icon = marker._icon;
@@ -63,13 +63,12 @@
                     }
                     const heading = icon.getAttribute("data-heading");
                     if (icon.style.transform.indexOf("rotateZ") === -1) {
-                        icon.style.transform = `${
-icon.style.transform
-} rotateZ(${heading || 0}deg)`;
+                        icon.style.transform = `${icon.style.transform} rotateZ(${heading || 0}deg)`;
                         icon.style.transformOrigin = 'center';
                     }
                 }
             };
+
             fetch("boats.json")
                 .then((response) => response.json())
                 .then((result) => result.result)
@@ -82,12 +81,13 @@ icon.style.transform
                             hue = (hue + 60) % 360;
                             const boat = result[boatName];
 
-                            selectedMarkers.forEach((res) => {
+                            selectedMarkers.forEach((res, index) => {
                                 if (boatName == res) {
                                     layer = L.polyline(boat.track, {
                                         color: `hsl(${hue}, 100%, 45%)`,
                                         weight: 2,
-                                    }).addTo(mapData);
+                                    }).addTo(mapData)
+                                    layers.push(layer)
 
                                     layer.on("mouseover", function () {
                                         layer.setStyle({
@@ -104,14 +104,15 @@ icon.style.transform
                                     marker = L.marker(boat.track[boat.track.length - 1], {
                                         icon: BoatIcon,
                                     }).addTo(mapData);
+                                    // pastMarker[index] = marker
 
-                                    markers.push(marker);
                                     marker._icon.setAttribute("data-heading", boat.heading);
                                     marker.bindPopup(boatName);
-
-                                    updateIconStyle();
+                                    markers.push(marker);
                                 }
                             })
+
+                            updateIconStyle();
                         }
                     } catch (error) {
                         console.error(`Error querying boats: ${error.message}`);
@@ -122,30 +123,33 @@ icon.style.transform
                 });
         }
 
-        function test() {
-            console.log("test123123")
-        }
-
-
         init()
+
         window.addEventListener('message', function (e) {
-            if (e.origin !== "http://localhost:8080") return;
+            if (e.origin !== "http://localhost:8080")
+                return;
             // console.log('child message');
             // console.log(e); // { parentData : 'test parent data' }
             // console.log("e.origin : " + e.origin); //http://abc.com(부모창 도메인)
-            // if (marker != null && layer != null) {
-            //     console.log(markers)
-            //     markers.splice(0)
-            //     marker.remove()
-            //     layer.remove()
-            //     console.log(markers)
-            // }
+            if (e.data._value == null) {
+                return
+            }
+            if (markers.length != 0) {
+                layers.forEach((layer) => {
+                    mapData.removeLayer(layer)
+                })
+                markers.forEach((marker) => {
+                    mapData.removeLayer(marker)
+                })
+                layers.splice(0)
+                markers.splice(0)
+            }
             selectedMarkers = e.data._value
-            init()
+            changeMap()
         });
 
         window.parent.postMessage({
-            test: 'test()'
+            test: "test"
         }, 'http://localhost:8080')
     </script>
 </head>

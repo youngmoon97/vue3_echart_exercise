@@ -190,6 +190,6 @@ function getVirtualData(year) {
 
 <style scoped>
 .chart {
-  height: 60vh;
+  height: 80vh;
 }
 </style>

@@ -5,13 +5,13 @@
       ref="ifrmWindy"
       id="ifrmWindy"
       src="http://127.0.0.1:5501/src/windy/windy.html"
-      @load="windyLoad"
       class="is-fullscreen"
     />
     <div class="checkboxes">
       <p>{{ selected }}</p>
       <v-btn @click="sendMessage"> Button </v-btn>
       <v-checkbox
+        hide-details
         v-for="item in boats.result"
         :key="item.sail"
         v-model="selected"
@@ -23,52 +23,24 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from "vue";
+import { ref } from "vue";
 import boats from "@/windy/boats.json";
 
 const selected = ref([]);
 const ifrmWindy = ref(null);
 
-onMounted(() => {
-  window.addEventListener("message", (e) => {
-    if (e.data.test)
-      // 전달받은 데이터를 명칭으로 하는 함수를 실행시킨다.
-      // window[e.data.test](
-      //   // 파라미터를 가변인자로 전달
-      //   ...e.data.params
-      // );
-      console.log(e.data.test);
-  });
-  if (getChild()) {
-    getChild();
-    // console.log(getChild().test());
-  }
-  // ifrmWindy.value.contentWindow.test();
-  // console.log(ifrmWindy);
-  // console.log(selected);
-});
-//
+const getChild = () => {
+  let frame = ifrmWindy.value;
+  // console.log(frame.contentDocument);
+  return frame.contentWindow || frame.contentDocument;
+};
+
 const sendMessage = () => {
-  console.log(selected);
-  // console.log(JSON.stringify(selected));
-  // console.log(JSON.parse(JSON.stringify(selected)));
-  // console.log(ifrmWindy.value.contentWindow);
-  ifrmWindy.value.contentWindow.postMessage(
+  getChild().postMessage(
     JSON.parse(JSON.stringify(selected)),
     "http://127.0.0.1:5501/src/windy/windy.html"
   );
 };
-const getChild = () => {
-  let frame = ifrmWindy.value;
-  console.log(frame.contentWindow);
-  return frame.contentWindow || frame.contentDocument;
-};
-// watch(() => {
-//   getChild();
-//   // if (getChild()) {
-//   //   getChild().changeMap();
-//   // }
-// });
 </script>
 
 <style>
@@ -79,5 +51,9 @@ iframe {
 }
 .vertical {
   display: flex;
+}
+.checkboxes {
+  width: 30%;
+  height: 80vh;
 }
 </style>
