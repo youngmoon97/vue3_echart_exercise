@@ -23,7 +23,7 @@
         let layer = null;
         let marker = null;
 
-        const MARKER =
+        let MARKER =
             encodeURIComponent(`
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img"
     class="iconify iconify--logos" width="37.07" height="36" preserveAspectRatio="xMidYMid meet" viewBox="0 0 256 198">
@@ -122,9 +122,13 @@ icon.style.transform
                 });
         }
 
+        function test() {
+            console.log("test123123")
+        }
+
+
         init()
         window.addEventListener('message', function (e) {
-
             if (e.origin !== "http://localhost:8080") return;
             // console.log('child message');
             // console.log(e); // { parentData : 'test parent data' }
@@ -139,6 +143,10 @@ icon.style.transform
             selectedMarkers = e.data._value
             init()
         });
+
+        window.parent.postMessage({
+            test: 'test()'
+        }, 'http://localhost:8080')
     </script>
 </head>
 <!-- <body class="body_scroll"> -->

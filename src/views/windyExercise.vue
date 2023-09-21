@@ -1,5 +1,5 @@
 <template>
-  <div class="vertical">
+  <div class="vertical" id="windy-com">
     <iframe
       type="text/html"
       ref="ifrmWindy"
@@ -28,25 +28,41 @@ import boats from "@/windy/boats.json";
 
 const selected = ref([]);
 const ifrmWindy = ref(null);
+
 onMounted(() => {
+  window.addEventListener("message", (e) => {
+    if (e.data.test)
+      // 전달받은 데이터를 명칭으로 하는 함수를 실행시킨다.
+      // window[e.data.test](
+      //   // 파라미터를 가변인자로 전달
+      //   ...e.data.params
+      // );
+      console.log(e.data.test);
+  });
+  if (getChild()) {
+    getChild();
+    // console.log(getChild().test());
+  }
+  // ifrmWindy.value.contentWindow.test();
   // console.log(ifrmWindy);
   // console.log(selected);
 });
 //
 const sendMessage = () => {
-  // console.log(selected);
+  console.log(selected);
   // console.log(JSON.stringify(selected));
   // console.log(JSON.parse(JSON.stringify(selected)));
+  // console.log(ifrmWindy.value.contentWindow);
   ifrmWindy.value.contentWindow.postMessage(
     JSON.parse(JSON.stringify(selected)),
     "http://127.0.0.1:5501/src/windy/windy.html"
   );
 };
-// const getChild = () => {
-//   let frame = ifrmWindy.value;
-//   console.log(frame.contentWindow);
-//   // return frame.contentWindow || frame.contentDocument;
-// };
+const getChild = () => {
+  let frame = ifrmWindy.value;
+  console.log(frame.contentWindow);
+  return frame.contentWindow || frame.contentDocument;
+};
 // watch(() => {
 //   getChild();
 //   // if (getChild()) {
