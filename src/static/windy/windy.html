@@ -87,6 +87,7 @@
                                         color: `hsl(${hue}, 100%, 45%)`,
                                         weight: 2,
                                     }).addTo(mapData)
+                                    // console.log(layer)
                                     layers.push(layer)
 
                                     layer.on("mouseover", function () {
@@ -121,6 +122,10 @@
                 .catch((error) => {
                     console.error(`Error querying boats: ${error.message}`);
                 });
+            window.parent.sendMessage({
+                function: "test",
+                param: ''
+            }, 'http://localhost:8080')
         }
 
         init()
@@ -129,11 +134,12 @@
             if (e.origin !== "http://localhost:8080")
                 return;
             // console.log('child message');
-            // console.log(e); // { parentData : 'test parent data' }
+            // console.log(e.data); // { parentData : 'test parent data' }
             // console.log("e.origin : " + e.origin); //http://abc.com(부모창 도메인)
             if (e.data._value == null) {
                 return
             }
+
             if (markers.length != 0) {
                 layers.forEach((layer) => {
                     mapData.removeLayer(layer)
@@ -148,9 +154,11 @@
             changeMap()
         });
 
-        window.parent.postMessage({
-            test: "test"
-        }, 'http://localhost:8080')
+
+        function test() {
+            window.parent.test()
+            console.log("iframe function test")
+        }
     </script>
 </head>
 <!-- <body class="body_scroll"> -->

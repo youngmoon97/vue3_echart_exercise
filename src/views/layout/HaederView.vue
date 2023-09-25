@@ -23,7 +23,8 @@
     >
     |
     <router-link class="menu" to="/heatMap">HeatMap</router-link> |
-    <router-link class="menu" to="/windy">Windy</router-link>
+    <router-link class="menu" to="/windy">Windy</router-link> |
+    <!-- <router-link class="menu" to="/smartWidget">SmartWidget</router-link> -->
   </div>
 </template>
 

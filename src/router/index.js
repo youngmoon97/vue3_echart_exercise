@@ -12,7 +12,7 @@ import dynamicDataAsyncMultipleChartv3 from "@/views/DynamicDataAsyncMultipleCha
 import heatMap from "@/views/HeatMap";
 import windy from "@/views/windyExercise";
 import seperateChart from "@/views/SeperateChart";
-
+// import smartWidget from "@/views/SmartWidget";
 const routes = [
   {
     path: "/",
@@ -79,6 +79,11 @@ const routes = [
     name: "windy",
     component: windy,
   },
+  // {
+  //   path: "/smartWidget",
+  //   name: "smartWidget",
+  //   component: smartWidget,
+  // },
 ];
 
 const router = createRouter({

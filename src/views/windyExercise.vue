@@ -1,10 +1,11 @@
 <template>
-  <div class="vertical" id="windy-com">
+  <div class="vertical" id="windy_com">
     <iframe
       type="text/html"
       ref="ifrmWindy"
       id="ifrmWindy"
-      src="http://127.0.0.1:5501/src/windy/windy.html"
+      src="http://127.0.0.1:5501/src/static/windy/windy.html"
+      @load="windyLoad"
       class="is-fullscreen"
     />
     <div class="checkboxes">
@@ -23,12 +24,21 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
-import boats from "@/windy/boats.json";
+/* eslint-disable */
+import { onMounted, ref } from "vue";
+import boats from "@/static/windy/boats.json";
 
 const selected = ref([]);
 const ifrmWindy = ref(null);
 
+const windyLoad = () => {
+  if (getChild()) {
+    // getChild().init();
+  }
+};
+const test = () => {
+  console.log("parent test");
+};
 const getChild = () => {
   let frame = ifrmWindy.value;
   // console.log(frame.contentDocument);
@@ -36,11 +46,24 @@ const getChild = () => {
 };
 
 const sendMessage = () => {
+  // console.log(selected.value);
   getChild().postMessage(
     JSON.parse(JSON.stringify(selected)),
     "http://127.0.0.1:5501/src/windy/windy.html"
   );
 };
+
+onMounted(() => {
+  getChild().test;
+
+  console.log(getChild());
+  window.addEventListener("message", function (e) {
+    if (e.origin !== "http://127.0.0.1:5501/src/windy/windy.html") return;
+    // console.log('child message');
+    console.log(e.data); // { parentData : 'test parent data' }
+    // console.log("e.origin : " + e.origin); //http://abc.com(부모창 도메인)
+  });
+});
 </script>
 
 <style>
