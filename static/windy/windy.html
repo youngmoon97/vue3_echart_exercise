@@ -159,6 +159,10 @@
             window.parent.test()
             console.log("iframe function test")
         }
+
+        window.parent.postMessage({
+            msg: 'windy init'
+        }, "*")
     </script>
 </head>
 <!-- <body class="body_scroll"> -->

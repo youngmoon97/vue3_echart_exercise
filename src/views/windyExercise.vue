@@ -4,7 +4,7 @@
       type="text/html"
       ref="ifrmWindy"
       id="ifrmWindy"
-      src="http://127.0.0.1:5501/src/static/windy/windy.html"
+      src="@/../static/windy/windy.html"
       @load="windyLoad"
       class="is-fullscreen"
     />
@@ -26,7 +26,7 @@
 <script setup>
 /* eslint-disable */
 import { onMounted, ref } from "vue";
-import boats from "@/static/windy/boats.json";
+import boats from "@/../static/windy/boats.json";
 
 const selected = ref([]);
 const ifrmWindy = ref(null);
@@ -41,7 +41,7 @@ const test = () => {
 };
 const getChild = () => {
   let frame = ifrmWindy.value;
-  // console.log(frame.contentDocument);
+  console.log(frame.contentDocument);
   return frame.contentWindow || frame.contentDocument;
 };
 
@@ -64,6 +64,17 @@ onMounted(() => {
     // console.log("e.origin : " + e.origin); //http://abc.com(부모창 도메인)
   });
 });
+const listen = (event) => {
+  // 메시지의 오리진을 체크하여 신뢰할 수 있는 메시지인지를 확인
+  // if (!event.data) return;
+  // if (!event.data.id || event.data.id !== this.id) return;
+  console.log("listen", event.data);
+
+  // if (this.getChild()) {
+  //   this.getChild().setData(this.prsMapData);
+  // }
+  this.$emit("message", event);
+};
 </script>
 
 <style>
